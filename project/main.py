@@ -22,9 +22,16 @@ class MainHandler(webapp2.RequestHandler):
 
 class PassHandler(webapp2.RequestHandler):
     def post(self):
+        a = 'user'
+        b = 'word'
+        c = 'other'
+        d = 'stuff'
         username = self.request.get("username")
         password = self.request.get("password")
-        self.response.write(username + " "+ password)
+        if username == a or c and password == b or d:
+                self.response.write("you are in")
+        else:
+                self.response.write('no')
 
 class FormHandler(webapp2.RequestHandler):
             def get(self):
