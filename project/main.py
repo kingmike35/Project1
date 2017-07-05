@@ -20,6 +20,12 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         self.response.write('Hello world!')
 
+class PassHandler(webapp2.RequestHandler):
+    def post(self):
+        username = self.request.get("username")
+        password = self.request.get("password")
+        self.response.write(username + " "+ password)
+
 class FormHandler(webapp2.RequestHandler):
             def get(self):
                 name=self.request.get('name')
@@ -30,4 +36,5 @@ class FormHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/submission',FormHandler),
+    ('/login', PassHandler),
 ], debug=True)
