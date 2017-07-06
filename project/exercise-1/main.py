@@ -1,7 +1,8 @@
 import jinja2
 import os
 import webapp2 # webapp2 is a module that you import
-
+import random
+import urllib2
 
 #set up environment for Jinja
 #this sets jinja's relative directory to match the directory name(dirname) of
@@ -42,6 +43,14 @@ class FormHandler(webapp2.RequestHandler):
               self.response.out.write('tay tay')
       else:
               self.response.out.write(template.render(string))
+
+class ResultHandler(webapp2.RequestHandler):
+  def get(self):
+      template = jinja_environment.get_template('templates/results.html')
+      hg=self.request.get("answer")
+      hg={"mg":hg}
+      self.response.out.write(template.render(hg))
 # creates a WSGIApplication and assigns it to the variable app.
 app = webapp2.WSGIApplication([
-  ('/', MainHandler), ("/submission",FormHandler)],debug=True)
+  ('/', MainHandler), ("/submission",FormHandler),
+  ('/results',ResultHandler)],debug=True)
