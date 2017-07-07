@@ -1,8 +1,10 @@
+import json
 import jinja2
 import os
 import webapp2 # webapp2 is a module that you import
 import random
 import urllib2
+import urllib
 
 #set up environment for Jinja
 #this sets jinja's relative directory to match the directory name(dirname) of
@@ -40,15 +42,25 @@ class FormHandler(webapp2.RequestHandler):
               anything_missing = True
 
       if anything_missing == True:
-              self.response.out.write('tay tay')
+              self.response.out.write('nope')
       else:
               self.response.out.write(template.render(string))
 
 class ResultHandler(webapp2.RequestHandler):
-  def get(self):
+   def get(self):
+
+     #
+      base_url = "http://api.giphy.com/v1/gifs/search?"
+      url_params = {'q': self.request.get("answer"), 'api_key': 'dc6zaTOxFJmzC', 'limit': 10}
+      giphy_response = urllib2.urlopen(base_url + urllib.urlencode(url_params)).read()
+
+      content_dict = json.loads(giphy_response)
+      gif_url = content_dict['data'][0]['images']['original']['url']
+      self.response.write(gif_url)
       template = jinja_environment.get_template('templates/results.html')
       hg=self.request.get("answer")
-      hg={"mg":hg}
+      hg={"gif_url":gif_url}
+
       self.response.out.write(template.render(hg))
 # creates a WSGIApplication and assigns it to the variable app.
 app = webapp2.WSGIApplication([
